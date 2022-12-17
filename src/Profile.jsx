@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { ThemeContext } from "./context/ThemeContext";
 import useUpdateProfile from "./hooks/use-update-profile";
 import ProfileSvg from "./img/img04.svg";
+import { BsCameraFill } from "react-icons/bs";
 
 function Profile() {
   const mode = useContext(ThemeContext).mode;
@@ -17,7 +18,12 @@ function Profile() {
     user,
     logOut,
     deleUserHandler,
+    isLoading,
+    updateProfileImageHandler,
   } = useUpdateProfile();
+
+  const defaultProfilePic =
+    "https://us.123rf.com/450wm/afe207/afe2071602/afe207160200158/52329668-m%C4%99%C5%BCczyzna-obraz-profilu-awatara-cie%C5%84-sylwetka-%C5%9Bwiat%C5%82a.jpg?ver=6";
 
   // submit func
   const submitHandler = (e) => {
@@ -37,14 +43,27 @@ function Profile() {
         </div>
         {/* Profile */}
 
-        <div className="flex justify-center items-center mt-8">
-          <img
-            src={
-              "https://us.123rf.com/450wm/afe207/afe2071602/afe207160200158/52329668-m%C4%99%C5%BCczyzna-obraz-profilu-awatara-cie%C5%84-sylwetka-%C5%9Bwiat%C5%82a.jpg?ver=6"
-            }
-            alt="profile picture"
-            className="w-32 rounded-full border-blue-500 border-2"
+        <div className="flex justify-center items-center mt-8 relative ">
+          <label htmlFor="profile-pic">
+            <img
+              src={!user.photoURL ? defaultProfilePic : user.photoURL}
+              alt="profile picture"
+              className="w-32 rounded-full border-blue-500 border-2"
+            />
+          </label>
+
+          <input
+            type="file"
+            id="profile-pic"
+            className="hidden"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              updateProfileImageHandler(file);
+            }}
           />
+          {/* <label htmlFor="profile-pic" className="fixed z-10 left-80">
+            <BsCameraFill size={20} />
+          </label> */}
         </div>
         <div className="flex flex-col justify-center items-center">
           <h2 className="text-3xl font-bold ">{user.displayName}</h2>
@@ -130,7 +149,9 @@ function Profile() {
               type="submit"
               className="text-sm py-2 text-white bg-blue-700 hover:bg-blue-500 rounded-lg"
             >
-              {isUpdatePassword ? "Update password" : "Update profile"}
+              {!isLoading &&
+                (isUpdatePassword ? "Update password" : "Update profile")}
+              {isLoading && "loading"}
             </button>
           </form>
 
