@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { AlertContext } from "../../context/AlertContext";
 import { ThemeContext } from "../../context/ThemeContext";
 import Alert from "../UI/Alert";
@@ -7,7 +7,10 @@ import Sidebar from "../UI/Sidebar";
 function Layout({ children }) {
   const mode = useContext(ThemeContext).mode;
   const { alertState, message, result } = useContext(AlertContext);
-  console.log(alertState);
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  // console.log(alertState);
   return (
     <>
       {alertState === "show" && <Alert message={message} result={result} />}
@@ -16,8 +19,15 @@ function Layout({ children }) {
           mode === "light" ? "bg-background-light" : "bg-background-dark"
         }`}
       >
-        <Sidebar />
-        <div className="w-screen">{children}</div>
+        <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
+        <div
+          onClick={() => {
+            setIsOpen(false);
+          }}
+          className="w-screen"
+        >
+          {children}
+        </div>
       </div>
     </>
   );

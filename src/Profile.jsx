@@ -1,121 +1,25 @@
-import {
-  signInWithEmailAndPassword,
-  updatePassword,
-  updateProfile,
-} from "firebase/auth";
-import React, { useContext, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { AlertContext } from "./context/AlertContext";
-import { AuthContext } from "./context/AuthContext";
+import React, { useContext } from "react";
 import { ThemeContext } from "./context/ThemeContext";
-import { auth } from "./firebase-config";
+import useUpdateProfile from "./hooks/use-update-profile";
 import ProfileSvg from "./img/img04.svg";
 
 function Profile() {
   const mode = useContext(ThemeContext).mode;
-  const { user, logIn } = useContext(AuthContext);
-  const { toggleAlert } = useContext(AlertContext);
 
-  const navigate = useNavigate();
+  // taking useful things from custom update profile hook
+  const {
+    updatePasswordHandler,
+    updateUserProfileHandler,
+    isUpdatePassword,
+    setIsUpdatePassword,
+    inputData,
+    setInputData,
+    user,
+    logOut,
+    deleUserHandler,
+  } = useUpdateProfile();
 
-  // local state
-  const [isUpdatePassword, setIsUpdatePassword] = useState(true);
-  const [inputData, setInputData] = useState({ first: "", second: "" });
-  console.log();
-  console.log(inputData);
-
-  // func
-  const updatePasswordHandler = () => {
-    const oldPassword = inputData.first;
-    const newPassword = inputData.second;
-
-    setInputData({ first: "", second: "" });
-
-    if (newPassword.length < 6) {
-      toggleAlert("show", "Password should be more than 5 charecter", "error");
-
-      setTimeout(() => {
-        toggleAlert("hide", null, null);
-      }, 2000);
-    }
-
-    // if old and new password are same then no change
-    if (oldPassword === newPassword) {
-      toggleAlert("show", "New password can not be same as old one", "error");
-
-      setTimeout(() => {
-        toggleAlert("hide", null, null);
-      }, 2000);
-      return;
-    }
-
-    const currenUserUid = user.uid;
-    const email = user.email;
-
-    // check the old password and if correct then set new password
-    signInWithEmailAndPassword(auth, email, oldPassword)
-      .then((userCredential) => {
-        const uid = userCredential.user.uid;
-
-        if (currenUserUid === uid) {
-          // means user change its own password
-
-          updatePassword(userCredential.user, newPassword)
-            .then(() => {
-              toggleAlert(
-                "show",
-                "Successfully reset your password",
-                "success"
-              );
-
-              setTimeout(() => {
-                toggleAlert("hide", null, null);
-              }, 2000);
-            })
-            .catch((err) => {
-              toggleAlert(
-                "show",
-                "Something went wrong! Check your credentials",
-                "error"
-              );
-
-              setTimeout(() => {
-                toggleAlert("hide", null, null);
-              }, 2000);
-            });
-        }
-      })
-      .catch((e) => {
-        console.log(e.message);
-
-        toggleAlert(
-          "show",
-          "Something went wrong! Check your credentials",
-          "error"
-        );
-
-        setTimeout(() => {
-          toggleAlert("hide", null, null);
-        }, 2000);
-      });
-  };
-
-  const updateUserProfileHandler = () => {
-    const name = inputData.first;
-    const email = inputData.second;
-    setInputData({ first: "", second: "" });
-
-    updateProfile(auth.currentUser, { displayName: name, email })
-      .then(() => {
-        console.log(auth.currentUser);
-        logIn(auth.currentUser);
-        navigate("/profile");
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  };
-
+  // submit func
   const submitHandler = (e) => {
     e.preventDefault();
 
@@ -193,7 +97,7 @@ function Profile() {
                 placeholder={
                   isUpdatePassword ? "Your actual password" : "Your name"
                 }
-                className=" border-2 p-2 text-sm rounded-md focus:border-blue-600 outline-none"
+                className=" border-2 p-2 text-sm rounded-md focus:border-blue-600 outline-none text-black"
                 onChange={(e) => {
                   setInputData({ ...inputData, first: e.target.value });
                 }}
@@ -214,7 +118,7 @@ function Profile() {
                 placeholder={
                   isUpdatePassword ? "Your new password" : "Your email"
                 }
-                className=" border-2 p-2 text-sm rounded-md focus:border-blue-600 outline-none"
+                className=" border-2 p-2 text-sm rounded-md focus:border-blue-600 outline-none text-black"
                 onChange={(e) => {
                   setInputData({ ...inputData, second: e.target.value });
                 }}
@@ -239,10 +143,16 @@ function Profile() {
                     ? "text-black bg-white"
                     : "text-white bg-black"
                 }`}
+                onClick={deleUserHandler}
               >
                 Delete account
               </button>
-              <button className="text-sm p-2 text-white bg-blue-700 hover:bg-blue-500 rounded-lg">
+              <button
+                className="text-sm p-2 text-white bg-blue-700 hover:bg-blue-500 rounded-lg"
+                onClick={() => {
+                  logOut();
+                }}
+              >
                 Logout
               </button>
             </div>

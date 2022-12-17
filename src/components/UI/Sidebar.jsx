@@ -10,11 +10,10 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { AlertContext } from "../../context/AlertContext";
 
-function Sidebar() {
-  const [isOpen, setIsOpen] = useState(false);
+function Sidebar({ isOpen, setIsOpen }) {
   const { mode, toggleMode } = useContext(ThemeContext);
   // console.log(mode);
-
+  // console.log(isOpen);
   const { logOut, isLoggedIn } = useContext(AuthContext);
   const { toggleAlert } = useContext(AlertContext);
 
