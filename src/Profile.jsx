@@ -18,17 +18,18 @@ function Profile() {
 
   const navigate = useNavigate();
 
-  // Refs
-  const firstInputRef = useRef();
-  const secondInputRef = useRef();
-
   // local state
   const [isUpdatePassword, setIsUpdatePassword] = useState(true);
+  const [inputData, setInputData] = useState({ first: "", second: "" });
+  console.log();
+  console.log(inputData);
 
   // func
-  const changePasswordHandler = () => {
-    const oldPassword = firstInputRef.current.value;
-    const newPassword = secondInputRef.current.value;
+  const updatePasswordHandler = () => {
+    const oldPassword = inputData.first;
+    const newPassword = inputData.second;
+
+    setInputData({ first: "", second: "" });
 
     if (newPassword.length < 6) {
       toggleAlert("show", "Password should be more than 5 charecter", "error");
@@ -100,8 +101,9 @@ function Profile() {
   };
 
   const updateUserProfileHandler = () => {
-    const name = firstInputRef.current.value;
-    const email = secondInputRef.current.value;
+    const name = inputData.first;
+    const email = inputData.second;
+    setInputData({ first: "", second: "" });
 
     updateProfile(auth.currentUser, { displayName: name, email })
       .then(() => {
@@ -117,7 +119,7 @@ function Profile() {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    isUpdatePassword ? changePasswordHandler() : updateUserProfileHandler();
+    isUpdatePassword ? updatePasswordHandler() : updateUserProfileHandler();
   };
   return (
     <div className="flex md:w-5/6 md:mx-auto">
@@ -154,6 +156,7 @@ function Profile() {
               }  p-2 ${isUpdatePassword && "text-blue-700"}`}
               onClick={() => {
                 setIsUpdatePassword(true);
+                setInputData({ first: "", second: "" });
               }}
             >
               CHANGE PASSWORD
@@ -164,6 +167,7 @@ function Profile() {
               }  p-2 ${!isUpdatePassword && "text-blue-700"}`}
               onClick={() => {
                 setIsUpdatePassword(false);
+                setInputData({ first: user.displayName, second: user.email });
               }}
             >
               EDIT USER PROFILE
@@ -190,7 +194,10 @@ function Profile() {
                   isUpdatePassword ? "Your actual password" : "Your name"
                 }
                 className=" border-2 p-2 text-sm rounded-md focus:border-blue-600 outline-none"
-                ref={firstInputRef}
+                onChange={(e) => {
+                  setInputData({ ...inputData, first: e.target.value });
+                }}
+                value={inputData.first}
               />
             </div>
 
@@ -208,7 +215,10 @@ function Profile() {
                   isUpdatePassword ? "Your new password" : "Your email"
                 }
                 className=" border-2 p-2 text-sm rounded-md focus:border-blue-600 outline-none"
-                ref={secondInputRef}
+                onChange={(e) => {
+                  setInputData({ ...inputData, second: e.target.value });
+                }}
+                value={inputData.second}
               />
             </div>
 
