@@ -15,3 +15,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.bg-success {
+  background-color: rgba(35, 210, 35, 0.505);
+}
+.bg-error {
+  background-color: rgba(215, 44, 44, 0.504);
+}
+.text-success {
+  color: rgb(0, 66, 0);
+}
+.text-error {
+  color: rgb(66, 0, 0);
+}

@@ -5,15 +5,18 @@ import App from "./App";
 import { ThemeContextProvider } from "./context/ThemeContext";
 import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./context/AuthContext";
+import { AlertContextProvider } from "./context/AlertContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
     <ThemeContextProvider>
       <AuthContextProvider>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
+        <AlertContextProvider>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </AlertContextProvider>
       </AuthContextProvider>
     </ThemeContextProvider>
   </BrowserRouter>

@@ -1,12 +1,25 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AlertContext } from "../../context/AlertContext";
+import { ThemeContext } from "../../context/ThemeContext";
+import Alert from "../UI/Alert";
 import Sidebar from "../UI/Sidebar";
 
 function Layout({ children }) {
+  const mode = useContext(ThemeContext).mode;
+  const { alertState, message, result } = useContext(AlertContext);
+  console.log(alertState);
   return (
-    <div className="flex">
-      <Sidebar />
-      <div className="w-screen">{children}</div>
-    </div>
+    <>
+      {alertState === "show" && <Alert message={message} result={result} />}
+      <div
+        className={`flex duration-500 min-h-screen ${
+          mode === "light" ? "bg-background-light" : "bg-background-dark"
+        }`}
+      >
+        <Sidebar />
+        <div className="w-screen">{children}</div>
+      </div>
+    </>
   );
 }
 

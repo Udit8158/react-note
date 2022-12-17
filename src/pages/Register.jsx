@@ -1,21 +1,27 @@
-import React, { useContext, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import logInSvg from "../img/img02.svg";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "../firebase-config";
 import { AuthContext } from "../context/AuthContext";
+import { ThemeContext } from "../context/ThemeContext";
+import { AlertContext } from "../context/AlertContext";
 
 function Register() {
+  // Refs
   const nameInputRef = useRef();
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
 
-  const { user, logIn, isLoggedIn } = useContext(AuthContext);
-  //   console.log(user);
-  //   console.log(isLoggedIn);
+  // contexts
+  const { logIn } = useContext(AuthContext);
+  const mode = useContext(ThemeContext).mode;
+  const { toggleAlert } = useContext(AlertContext);
 
-  const navigate = useNavigate();
+  // local state
+  const [isLoading, setIsLoading] = useState(false);
 
+  // submit func
   const submitHandler = (e) => {
     e.preventDefault();
 
@@ -25,6 +31,7 @@ function Register() {
 
     // sign up new user
 
+    setIsLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const currentUser = userCredential.user;
@@ -33,20 +40,49 @@ function Register() {
         updateProfile(currentUser, { displayName: name });
 
         logIn(currentUser);
-        navigate("/");
+
+        setIsLoading(false);
+        toggleAlert("show", "Account created successfully", "success");
+
+        setTimeout(() => {
+          toggleAlert("hide", null, null);
+        }, 2000);
       })
+      .then(() => {})
 
       .catch((e) => {
         console.log(e.message);
+        setIsLoading(false);
+        toggleAlert(
+          "show",
+          "Some thing went wrong! check your credentials",
+          "error"
+        );
+
+        setTimeout(() => {
+          toggleAlert("hide", null, null);
+        }, 2000);
       });
   };
   return (
-    <div className="flex w-full mx-auto items-center  mt-20">
+    <div className="flex w-full mx-auto items-center mt-20">
       <div className="flex flex-col w-5/6 mx-auto gap-7  lg:w-3/6 lg:px-4">
-        <h1 className="text-2xl font-bold">Create new account!</h1>
+        <h1
+          className={`text-2xl font-bold duration-500 ${
+            mode === "light" ? "text-black" : "text-white"
+          }`}
+        >
+          Create new account!
+        </h1>
         <form className="flex flex-col gap-3 " onSubmit={submitHandler}>
           <div className="flex flex-col gap-1">
-            <label>Name</label>
+            <label
+              className={`${
+                mode === "light" ? "text-black" : "text-white"
+              } text-sm font-light`}
+            >
+              Name
+            </label>
             <input
               type="text"
               placeholder="Your name"
@@ -56,7 +92,13 @@ function Register() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label>Email</label>
+            <label
+              className={`${
+                mode === "light" ? "text-black" : "text-white"
+              } text-sm font-light`}
+            >
+              Email
+            </label>
             <input
               type="email"
               placeholder="Your email"
@@ -66,7 +108,13 @@ function Register() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label>Password</label>
+            <label
+              className={`${
+                mode === "light" ? "text-black" : "text-white"
+              } text-sm font-light`}
+            >
+              Password
+            </label>
             <input
               type="password"
               placeholder="Your password"
@@ -85,7 +133,7 @@ function Register() {
             type="submit"
             className="text-sm py-2 text-white bg-blue-700 hover:bg-blue-500 rounded-lg"
           >
-            Create account
+            {isLoading ? "loading" : "Create account"}
           </button>
         </form>
       </div>
