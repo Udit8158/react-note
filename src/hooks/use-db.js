@@ -50,11 +50,21 @@ const useDB = () => {
     // getData(uid);
   };
 
+  const toggleTrashNote = (id) => {
+    console.log("in");
+    // const trashedNote = notes.find((note) => note.id === id);
+    // trashedNote.isTrashed = !trashedNote.isTrashed;
+    // const filtered = notes.filter((note) => note.id !== id);
+    // setNotes([...filtered, trashedNote]);
+    setNotes([]);
+    console.log(notes);
+  };
+
   useEffect(() => {
     getData(user.uid);
   }, []);
 
-  return { sendData, setNotes, notes, loading };
+  return { sendData, setNotes, notes, loading, toggleTrashNote };
 };
 
 export default useDB;
