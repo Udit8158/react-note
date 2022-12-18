@@ -8,6 +8,7 @@ import { AlertContext } from "../context/AlertContext";
 const useDB = () => {
   const { user } = useContext(AuthContext);
   const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   // alert
   const { toggleAlert } = useContext(AlertContext);
@@ -15,13 +16,8 @@ const useDB = () => {
   const navigate = useNavigate();
 
   const getData = async (uid) => {
-    const dbRef = doc(db, "users", user.uid);
-    // const res = await getDoc(dbRef);
-
-    // setNotes(res.data().notes);
-
-    // Real time update
     try {
+      const dbRef = doc(db, "users", user.uid);
       onSnapshot(dbRef, (doc) => {
         doc.data() && setNotes(doc.data().notes);
       });
@@ -31,23 +27,34 @@ const useDB = () => {
   };
 
   const sendData = async (data, uid) => {
-    const dbRef = doc(db, "users", uid);
-    await setDoc(dbRef, data);
-    toggleAlert("show", "Successfully create your note", "success");
+    try {
+      setLoading(true);
+      const dbRef = doc(db, "users", uid);
+      await setDoc(dbRef, data);
+      toggleAlert("show", "Successfully create your note", "success");
+      setLoading(false);
+      navigate("/notes");
+
+      setTimeout(() => {
+        toggleAlert("hide", null, null);
+      }, 2000);
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
+      toggleAlert("show", "Something goes wrong", "error");
+      setTimeout(() => {
+        toggleAlert("hide", null, null);
+      }, 2000);
+    }
 
     // getData(uid);
-    navigate("/notes");
-
-    setTimeout(() => {
-      toggleAlert("hide", null, null);
-    }, 2000);
   };
 
   useEffect(() => {
     getData(user.uid);
   }, []);
 
-  return { sendData, setNotes, notes };
+  return { sendData, setNotes, notes, loading };
 };
 
 export default useDB;

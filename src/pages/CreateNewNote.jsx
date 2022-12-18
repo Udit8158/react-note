@@ -15,7 +15,7 @@ function CreateNewNote() {
   const { user } = useContext(AuthContext);
 
   // using useDB hook custom
-  const { sendData, notes, setNotes } = useDB();
+  const { sendData, notes, setNotes, loading } = useDB();
   // console.log(notes);
   const arr = notes;
 
@@ -95,7 +95,7 @@ function CreateNewNote() {
             type="submit"
             className="text-sm py-2 text-white bg-blue-700 hover:bg-blue-500 rounded-lg"
           >
-            Create new note
+            {loading ? "loading" : "Create new note"}
           </button>
         </form>
       </div>
