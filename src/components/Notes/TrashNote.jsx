@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
 
-function Note({ title, description, id, toggleTrashNote }) {
+function TrashNote({ title, description, deleteNote, id, toggleTrashNote }) {
   const { mode } = useContext(ThemeContext);
-
   return (
     <div
       className={`${
@@ -18,8 +17,11 @@ function Note({ title, description, id, toggleTrashNote }) {
         <button
           type="submit"
           className="text-sm  text-white bg-blue-700 hover:bg-blue-500 rounded-lg py-2 px-6"
+          onClick={() => {
+            deleteNote(id);
+          }}
         >
-          Details
+          Delete
         </button>
         <button
           className={`text-sm py-2 px-6 border-2 rounded-lg hover:border-blue-700  `}
@@ -27,11 +29,11 @@ function Note({ title, description, id, toggleTrashNote }) {
             toggleTrashNote(id);
           }}
         >
-          Trash
+          Undo
         </button>
       </div>
     </div>
   );
 }
 
-export default Note;
+export default TrashNote;

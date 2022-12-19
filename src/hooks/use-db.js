@@ -1,5 +1,5 @@
 import { doc, setDoc, onSnapshot } from "firebase/firestore";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { db } from "../firebase-config";
 import { useNavigate } from "react-router-dom";
@@ -9,12 +9,14 @@ const useDB = () => {
   const { user } = useContext(AuthContext);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(false);
+  // console.log(notes);
   // alert
   const { toggleAlert } = useContext(AlertContext);
 
   const navigate = useNavigate();
 
   const getData = async (uid) => {
+    // console.log("calling");
     try {
       setLoading(true);
       const dbRef = doc(db, "users", uid);
@@ -58,14 +60,43 @@ const useDB = () => {
     const filtered = notes.filter((note) => note.id !== id);
     setNotes([...filtered, trashedNote]);
 
-    sendData({ notes }, user.uid, "Successfully trashed");
+    sendData({ notes }, user.uid, "successful");
+  };
+
+  const toggleTrashAll = () => {
+    const allFiltered = notes.map((note) => (note.isTrashed = !note.isTrashed));
+    setNotes(allFiltered);
+
+    sendData({ notes: allFiltered }, user.uid, "successfully trashed all");
+  };
+
+  const deleteNote = (id) => {
+    const filtered = notes.filter((note) => note.id !== id);
+    setNotes(filtered);
+
+    sendData({ notes: filtered }, user.uid, "successfully deleted");
+  };
+
+  const deleteAllNote = () => {
+    setNotes([]);
+    sendData({ notes: [] }, user.uid, "successfully deleted all notes");
   };
 
   useEffect(() => {
     getData(user.uid);
+    // console.log("effec");
   }, []);
 
-  return { sendData, setNotes, notes, loading, toggleTrashNote };
+  return {
+    sendData,
+    setNotes,
+    notes,
+    loading,
+    toggleTrashNote,
+    toggleTrashAll,
+    deleteNote,
+    deleteAllNote,
+  };
 };
 
 export default useDB;

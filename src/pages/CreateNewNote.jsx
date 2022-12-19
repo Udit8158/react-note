@@ -78,6 +78,7 @@ function CreateNewNote() {
               rows={"3"}
               className="focus:border-blue-600 outline-none border-2 p-2 text-sm rounded-md"
               ref={descriptionInputRef}
+              minLength="1"
             ></textarea>
           </div>
           <div className="flex gap-2 items-center">

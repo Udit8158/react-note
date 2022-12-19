@@ -10,7 +10,8 @@ function Notes() {
   // context
   const { mode } = useContext(ThemeContext);
   // data form useDB
-  const { notes, toggleTrashNote, loading } = useDB();
+  const { notes, toggleTrashNote, loading, toggleTrashAll, deleteNote } =
+    useDB();
 
   // local state
   const [filteredNotes, setFilteredNotes] = useState([]);
@@ -57,7 +58,7 @@ function Notes() {
                   type="text"
                   id="search"
                   placeholder="Search notes "
-                  className="outline-none text-black p-2 text-sm border-2 border-white rounded-md focus:border-blue-500 bg-gray-100 focus:w-60 md:focus:w-80 duration-300"
+                  className="outline-none text-black p-2 text-sm border-2 border-white rounded-md focus:border-blue-500 bg-gray-100 focus:w-60 md:focus:w-80 duration-500"
                   onChange={(e) => {
                     searchHandler(e.target.value);
                   }}
@@ -67,8 +68,8 @@ function Notes() {
                 </label>
               </div>
               <button
-                type="submit"
                 className="text-sm py-2 px-4 text-white bg-blue-700 hover:bg-blue-500 rounded-lg md:px-4"
+                onClick={toggleTrashAll}
               >
                 {"Trash all"}
               </button>
