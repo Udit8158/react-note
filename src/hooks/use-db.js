@@ -64,8 +64,8 @@ const useDB = () => {
   };
 
   const toggleTrashAll = () => {
-    const allFiltered = notes.map((note) => (note.isTrashed = !note.isTrashed));
-    setNotes(allFiltered);
+    const allFiltered = notes;
+    allFiltered.map((note) => (note.isTrashed = !note.isTrashed));
 
     sendData({ notes: allFiltered }, user.uid, "successfully trashed all");
   };
@@ -82,6 +82,24 @@ const useDB = () => {
     sendData({ notes: [] }, user.uid, "successfully deleted all notes");
   };
 
+  const toggleFavourite = (id) => {
+    const trashedNote = notes.find((note) => note.id === id);
+    trashedNote.isChecked = !trashedNote.isChecked;
+    const filtered = notes.filter((note) => note.id !== id);
+    setNotes([...filtered, trashedNote]);
+
+    sendData({ notes }, user.uid, "successfuly unfavourite note");
+  };
+
+  const unfavouriteAll = () => {
+    // console.log(notes);
+    const filtered = notes;
+    // console.log(filtered);
+    filtered.map((note) => (note.isChecked = false));
+
+    sendData({ notes: filtered }, user.uid, "successfuly unfavourite all");
+  };
+
   useEffect(() => {
     getData(user.uid);
     // console.log("effec");
@@ -96,6 +114,8 @@ const useDB = () => {
     toggleTrashAll,
     deleteNote,
     deleteAllNote,
+    toggleFavourite,
+    unfavouriteAll,
   };
 };
 
