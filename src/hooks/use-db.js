@@ -9,7 +9,6 @@ const useDB = () => {
   const { user } = useContext(AuthContext);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(false);
-
   // alert
   const { toggleAlert } = useContext(AlertContext);
 
