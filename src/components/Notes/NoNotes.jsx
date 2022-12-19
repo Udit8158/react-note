@@ -5,11 +5,16 @@ import useDB from "../../hooks/use-db";
 import noNotesSvg from "../../img/img05.svg";
 
 function NoNotes() {
+  // using data
   const { mode } = useContext(ThemeContext);
   const { notes } = useDB();
-  console.log(notes);
+
   return (
-    <div className={`mt-10 ${mode === "light" ? "text-black" : "text-white"}`}>
+    <div
+      className={`mt-10 ${
+        mode === "light" ? "text-black" : "text-white"
+      } md:mt-5`}
+    >
       <img
         src={noNotesSvg}
         alt="no notes"

@@ -16,11 +16,14 @@ const useDB = () => {
 
   const getData = async (uid) => {
     try {
-      const dbRef = doc(db, "users", user.uid);
+      setLoading(true);
+      const dbRef = doc(db, "users", uid);
       onSnapshot(dbRef, (doc) => {
         doc.data() && setNotes(doc.data().notes);
+        setLoading(false);
       });
     } catch (err) {
+      setLoading(false);
       console.log(err.message);
     }
   };
@@ -50,7 +53,6 @@ const useDB = () => {
   };
 
   const toggleTrashNote = (id) => {
-    console.log("in");
     const trashedNote = notes.find((note) => note.id === id);
     trashedNote.isTrashed = !trashedNote.isTrashed;
     const filtered = notes.filter((note) => note.id !== id);

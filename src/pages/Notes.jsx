@@ -10,7 +10,7 @@ function Notes() {
   // context
   const { mode } = useContext(ThemeContext);
   // data form useDB
-  const { notes, toggleTrashNote } = useDB();
+  const { notes, toggleTrashNote, loading } = useDB();
 
   // local state
   const [filteredNotes, setFilteredNotes] = useState([]);
@@ -19,12 +19,11 @@ function Notes() {
   useEffect(() => {
     setFilteredNotes(notes.filter((note) => note.isTrashed === false));
   }, [notes]);
-  console.log(notes);
+  // console.log(notes);
 
   // search func
   const searchHandler = (input) => {
     if (input.trim().length !== 0) {
-      console.log(input);
       const filteredNotesInSearch = filteredNotes.filter((note) =>
         note.title.toLowerCase().includes(input.trim().toLowerCase())
       );
@@ -38,7 +37,7 @@ function Notes() {
     <div
       className={`${
         mode === "light" ? "text-black" : "text-white"
-      } mt-14 w-11/12 mx-auto flex flex-col md:w-10/12 lg:w-11/12 duration-500`}
+      } mt-14 w-11/12 mx-auto flex flex-col md:w-10/12 lg:w-11/12 duration-500 md:mt-10`}
     >
       {notes && (
         <div>
@@ -75,26 +74,27 @@ function Notes() {
               </button>
             </div>
           </div>
-          {/* {loading && <Spinner />} */}
+          {loading && <Spinner />}
 
           {/* Notes */}
-          {filteredNotes.length > 0 ? (
-            <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {filteredNotes.map((note) => {
-                return (
-                  <Note
-                    key={note.id}
-                    title={note.title}
-                    description={note.description}
-                    id={note.id}
-                    toggleTrashNote={toggleTrashNote}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <NoNotes />
-          )}
+          {!loading &&
+            (filteredNotes.length > 0 ? (
+              <div className="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+                {filteredNotes.map((note) => {
+                  return (
+                    <Note
+                      key={note.id}
+                      title={note.title}
+                      description={note.description}
+                      id={note.id}
+                      toggleTrashNote={toggleTrashNote}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <NoNotes />
+            ))}
         </div>
       )}
     </div>
