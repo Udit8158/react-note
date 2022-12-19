@@ -35,9 +35,9 @@ function Notes() {
 
   return (
     <div
-      className={`${
-        mode === "light" ? "text-black" : "text-white"
-      } mt-14 w-11/12 mx-auto flex flex-col md:w-10/12 lg:w-11/12 duration-500 md:mt-10`}
+      className={`${mode === "light" ? "text-black" : "text-white"} mt-14 ${
+        filteredNotes.length > 0 ? "w-11/12" : "w-full"
+      } mx-auto flex flex-col md:w-10/12 lg:w-11/12 duration-500 md:mt-10`}
     >
       {notes && (
         <div>
@@ -57,7 +57,7 @@ function Notes() {
                   type="text"
                   id="search"
                   placeholder="Search notes "
-                  className="outline-none text-black p-2 text-sm border-2 border-white rounded-md focus:border-blue-500 bg-gray-100 focus:w-80 duration-300"
+                  className="outline-none text-black p-2 text-sm border-2 border-white rounded-md focus:border-blue-500 bg-gray-100 focus:w-60 md:focus:w-80 duration-300"
                   onChange={(e) => {
                     searchHandler(e.target.value);
                   }}
