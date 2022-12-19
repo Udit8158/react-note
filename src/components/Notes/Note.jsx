@@ -1,10 +1,8 @@
 import React, { useContext } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
-import useDB from "../../hooks/use-db";
 
-function Note({ title, description, id }) {
+function Note({ title, description, id, toggleTrashNote }) {
   const { mode } = useContext(ThemeContext);
-  const { toggleTrashNote } = useDB();
 
   return (
     <div

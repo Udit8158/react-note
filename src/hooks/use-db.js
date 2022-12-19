@@ -26,12 +26,12 @@ const useDB = () => {
     }
   };
 
-  const sendData = async (data, uid) => {
+  const sendData = async (data, uid, msg = "Successfully create your note") => {
     try {
       setLoading(true);
       const dbRef = doc(db, "users", uid);
       await setDoc(dbRef, data);
-      toggleAlert("show", "Successfully create your note", "success");
+      toggleAlert("show", msg, "success");
       setLoading(false);
       navigate("/notes");
 
@@ -52,12 +52,12 @@ const useDB = () => {
 
   const toggleTrashNote = (id) => {
     console.log("in");
-    // const trashedNote = notes.find((note) => note.id === id);
-    // trashedNote.isTrashed = !trashedNote.isTrashed;
-    // const filtered = notes.filter((note) => note.id !== id);
-    // setNotes([...filtered, trashedNote]);
-    setNotes([]);
-    console.log(notes);
+    const trashedNote = notes.find((note) => note.id === id);
+    trashedNote.isTrashed = !trashedNote.isTrashed;
+    const filtered = notes.filter((note) => note.id !== id);
+    setNotes([...filtered, trashedNote]);
+
+    sendData({ notes }, user.uid, "Successfully trashed");
   };
 
   useEffect(() => {

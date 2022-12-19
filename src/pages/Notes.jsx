@@ -5,14 +5,14 @@ import useDB from "../hooks/use-db";
 
 function Notes() {
   const { mode } = useContext(ThemeContext);
-  const { notes } = useDB();
+  const { notes, toggleTrashNote } = useDB();
 
   const [filteredNotes, setFilteredNotes] = useState([]);
 
   useEffect(() => {
     setFilteredNotes(notes.filter((note) => note.isTrashed === false));
   }, [notes]);
-  console.log(filteredNotes);
+  console.log(notes);
 
   const searchHandler = (input) => {
     if (input.trim().length !== 0) {
@@ -69,6 +69,7 @@ function Notes() {
                 title={note.title}
                 description={note.description}
                 id={note.id}
+                toggleTrashNote={toggleTrashNote}
               />
             );
           })}
