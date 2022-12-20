@@ -10,6 +10,7 @@ import Notes from "./pages/Notes";
 import FavouriteNotes from "./pages/FavouriteNotes";
 import TrashNotes from "./pages/TrashNotes";
 import Profile from "./Profile";
+import NoteDetail from "./pages/NoteDetail";
 
 function App() {
   const { isLoggedIn } = useContext(AuthContext);
@@ -25,6 +26,10 @@ function App() {
             <Route path="/create-new-note" element={<CreateNewNote />} />
           )}
           {isLoggedIn && <Route path="/notes" element={<Notes />} />}
+          {isLoggedIn && (
+            <Route path="/notes-details/:id" element={<NoteDetail />} />
+          )}
+
           {isLoggedIn && (
             <Route path="/favourite-notes" element={<FavouriteNotes />} />
           )}

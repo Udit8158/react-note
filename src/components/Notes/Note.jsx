@@ -1,4 +1,5 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { ThemeContext } from "../../context/ThemeContext";
 
 function Note({ title, description, id, toggleTrashNote }) {
@@ -19,7 +20,7 @@ function Note({ title, description, id, toggleTrashNote }) {
           type="submit"
           className="text-sm  text-white bg-blue-700 hover:bg-blue-500 rounded-lg py-2 px-6"
         >
-          Details
+          <Link to={`/notes-details/${id}`}>Details</Link>
         </button>
         <button
           className={`text-sm py-2 px-6 border-2 rounded-lg hover:border-blue-700  `}

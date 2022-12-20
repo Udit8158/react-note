@@ -32,6 +32,7 @@ function CreateNewNote() {
       isTrashed: false,
       createdAt: date.toLocaleString(),
       id,
+      isEdited: false,
     };
     arr.push(data);
 
