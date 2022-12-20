@@ -23,10 +23,13 @@ function Notes() {
 
   // search func
   const searchHandler = (input) => {
+    const initialFilter = notes.filter((note) => note.isTrashed === false);
+
     if (input.trim().length !== 0) {
-      const filteredNotesInSearch = filteredNotes.filter((note) =>
+      const filteredNotesInSearch = initialFilter.filter((note) =>
         note.title.toLowerCase().includes(input.trim().toLowerCase())
       );
+
       setFilteredNotes(filteredNotesInSearch);
     } else {
       setFilteredNotes(notes.filter((note) => note.isTrashed === false));

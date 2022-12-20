@@ -31,7 +31,7 @@ function Sidebar({ isOpen, setIsOpen }) {
       className={`duration-500 ${
         mode === "light" ? "bg-gray-50" : "bg-gray-900"
       } ${isOpen ? "w-56" : "w-16"} min-h-screen flex flex-col gap-14 p-2 ${
-        isOpen && "fixed left-0"
+        isOpen && "fixed left-0 z-50"
       }  `}
     >
       <div className="flex gap-3 items-center">

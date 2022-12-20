@@ -14,7 +14,9 @@ function Notes() {
     useDB();
 
   // local state
-  const [filteredNotes, setFilteredNotes] = useState([]);
+  const [filteredNotes, setFilteredNotes] = useState(
+    notes.filter((note) => note.isTrashed === true)
+  );
 
   // setting up filtered notes on every notes change
   useEffect(() => {
@@ -24,13 +26,15 @@ function Notes() {
 
   // search func
   const searchHandler = (input) => {
+    const initialFilter = notes.filter((note) => note.isTrashed === true);
+
     if (input.trim().length !== 0) {
-      const filteredNotesInSearch = filteredNotes.filter((note) =>
+      const filteredNotesInSearch = initialFilter.filter((note) =>
         note.title.toLowerCase().includes(input.trim().toLowerCase())
       );
       setFilteredNotes(filteredNotesInSearch);
     } else {
-      setFilteredNotes(notes.filter((note) => note.isTrashed === false));
+      setFilteredNotes(notes.filter((note) => note.isTrashed === true));
     }
   };
 
