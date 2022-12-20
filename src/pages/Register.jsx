@@ -38,7 +38,6 @@ function Register() {
 
         // update name of the user
         updateProfile(currentUser, { displayName: name });
-
         logIn(currentUser);
 
         setIsLoading(false);

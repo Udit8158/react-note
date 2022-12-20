@@ -6,6 +6,7 @@ import { ThemeContext } from "../../context/ThemeContext";
 function Details({ createdAt, lastEdited, isEdited }) {
   const { mode } = useContext(ThemeContext);
   const { user } = useContext(AuthContext);
+
   return (
     <div
       className={`${
@@ -14,16 +15,17 @@ function Details({ createdAt, lastEdited, isEdited }) {
         mode === "light" ? "text-black" : "text-white"
       } duration-500  `}
     >
-      {isEdited && (
-        <div
-          className={`${
-            mode === "light" ? "bg-gray-50" : "bg-gray-800"
-          } rounded-md p-2`}
-        >
-          <h3 className="font-bold text-lg">Last edit</h3>
-          <span className="italic text-sm">{lastEdited}</span>
-        </div>
-      )}
+      <div
+        className={`${
+          mode === "light" ? "bg-gray-50" : "bg-gray-800"
+        } rounded-md p-2`}
+      >
+        <h3 className="font-bold text-lg">Last edit</h3>
+        <span className="italic text-sm">
+          {isEdited ? lastEdited : "Not edited till now"}
+        </span>
+      </div>
+
       <div
         className={`${
           mode === "light" ? "bg-gray-50" : "bg-gray-800"
