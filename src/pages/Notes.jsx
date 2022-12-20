@@ -10,8 +10,7 @@ function Notes() {
   // context
   const { mode } = useContext(ThemeContext);
   // data form useDB
-  const { notes, toggleTrashNote, loading, toggleTrashAll, deleteNote } =
-    useDB();
+  const { notes, toggleTrashNote, loading, toggleTrashAll } = useDB();
 
   // local state
   const [filteredNotes, setFilteredNotes] = useState([]);
