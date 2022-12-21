@@ -34,7 +34,7 @@ export const AuthContextProvider = ({ children }) => {
     user,
     isLoggedIn,
     logIn: logInHandler,
-    logOut: logInHandler,
+    logOut: logOutHandler,
   };
   return (
     <AuthContext.Provider value={initialVal}>{children}</AuthContext.Provider>
