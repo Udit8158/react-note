@@ -17,26 +17,26 @@ const useDB = () => {
 
   const getData = async (uid) => {
     // console.log("calling");
+    setLoading((prev) => !prev);
     try {
-      setLoading(true);
       const dbRef = doc(db, "users", uid);
       onSnapshot(dbRef, (doc) => {
-        doc.data() && setNotes(doc.data().notes);
-        setLoading(false);
+        doc.data() && setNotes(() => doc.data().notes);
+        setLoading((prev) => !prev);
       });
     } catch (err) {
-      setLoading(false);
+      setLoading((prev) => !prev);
       console.log(err.message);
     }
   };
 
   const sendData = async (data, uid, msg = "Successfully create your note") => {
+    setLoading((prev) => !prev);
     try {
-      setLoading(true);
       const dbRef = doc(db, "users", uid);
       await setDoc(dbRef, data);
       toggleAlert("show", msg, "success");
-      setLoading(false);
+      setLoading((prev) => !prev);
       navigate("/notes");
 
       setTimeout(() => {
@@ -44,7 +44,7 @@ const useDB = () => {
       }, 2000);
     } catch (err) {
       console.log(err);
-      setLoading(false);
+      setLoading((prev) => !prev);
       toggleAlert("show", "Something goes wrong", "error");
       setTimeout(() => {
         toggleAlert("hide", null, null);
