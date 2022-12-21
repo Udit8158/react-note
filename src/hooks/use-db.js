@@ -9,6 +9,7 @@ const useDB = () => {
   const { user } = useContext(AuthContext);
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(false);
+
   // console.log(notes);
   // alert
   const { toggleAlert } = useContext(AlertContext);
@@ -17,27 +18,26 @@ const useDB = () => {
   const location = useLocation();
 
   const getData = async (uid) => {
-    // console.log("calling");
-    setLoading((prev) => !prev);
+    setLoading(true);
     try {
       const dbRef = doc(db, "users", uid);
       onSnapshot(dbRef, (doc) => {
         doc.data() && setNotes(() => doc.data().notes);
-        setLoading((prev) => !prev);
+        setLoading(false);
       });
     } catch (err) {
-      setLoading((prev) => !prev);
+      setLoading(false);
       console.log(err.message);
     }
   };
 
   const sendData = async (data, uid, msg = "Successfully create your note") => {
-    setLoading((prev) => !prev);
+    setLoading(true);
     try {
       const dbRef = doc(db, "users", uid);
       await setDoc(dbRef, data);
       toggleAlert("show", msg, "success");
-      setLoading((prev) => !prev);
+      setLoading(false);
       // console.log(location);
 
       // only navigate to notes if the user in the create note page
@@ -108,8 +108,7 @@ const useDB = () => {
 
   useEffect(() => {
     getData(user.uid);
-    // console.log("effec");
-  }, []);
+  }, [notes.length]);
 
   return {
     sendData,
