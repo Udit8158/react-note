@@ -2,7 +2,7 @@ import { doc, setDoc, onSnapshot } from "firebase/firestore";
 import { useContext, useEffect, useState, useCallback } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { db } from "../firebase-config";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { AlertContext } from "../context/AlertContext";
 
 const useDB = () => {
@@ -14,6 +14,7 @@ const useDB = () => {
   const { toggleAlert } = useContext(AlertContext);
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const getData = async (uid) => {
     // console.log("calling");
@@ -37,7 +38,12 @@ const useDB = () => {
       await setDoc(dbRef, data);
       toggleAlert("show", msg, "success");
       setLoading((prev) => !prev);
-      navigate("/notes");
+      // console.log(location);
+
+      // only navigate to notes if the user in the create note page
+      if (location.pathname === "/create-new-note") {
+        navigate("/notes");
+      }
 
       setTimeout(() => {
         toggleAlert("hide", null, null);
