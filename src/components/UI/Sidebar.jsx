@@ -4,7 +4,7 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { FaRegTrashAlt, FaToggleOn } from "react-icons/fa";
 import { FiLogOut } from "react-icons/fi";
 import { AiOutlineUser } from "react-icons/ai";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
@@ -23,6 +23,59 @@ function Sidebar({ isOpen, setIsOpen }) {
       toggleAlert("hide", null, null);
     }, 2000);
   };
+
+  const sideBarItems = [
+    {
+      path: "/create-new-note",
+      icon: (
+        <IoIosAdd
+          className={`text-${mode === "light" ? "black" : "white"}`}
+          size={30}
+        />
+      ),
+      text: "Create new note",
+    },
+    {
+      path: "/notes",
+      icon: (
+        <MdNotes
+          className={`text-${mode === "light" ? "black" : "white"}`}
+          size={30}
+        />
+      ),
+      text: "Notes",
+    },
+    {
+      path: "/trash-notes",
+      icon: (
+        <FaRegTrashAlt
+          className={`text-${mode === "light" ? "black" : "white"}`}
+          size={30}
+        />
+      ),
+      text: "Trash notes",
+    },
+    {
+      path: "/favourite-notes",
+      icon: (
+        <MdFavoriteBorder
+          className={`text-${mode === "light" ? "black" : "white"}`}
+          size={30}
+        />
+      ),
+      text: "Favourite notes",
+    },
+    {
+      path: `${isLoggedIn ? "/profile" : "/register"}`,
+      icon: (
+        <AiOutlineUser
+          className={`text-${mode === "light" ? "black" : "white"}`}
+          size={30}
+        />
+      ),
+      text: "Login",
+    },
+  ];
 
   return (
     <div
@@ -55,76 +108,20 @@ function Sidebar({ isOpen, setIsOpen }) {
       </div>
 
       <div className="flex flex-col gap-4">
-        <Link to={"/create-new-note"}>
-          <div className="flex  items-center gap-2 hover:bg-slate-400 py-2 px-3 cursor-pointer rounded-sm">
-            <IoIosAdd
-              className={`text-${mode === "light" ? "black" : "white"}`}
-              size={30}
-            />
-
-            <p
-              className={`text-${mode === "light" ? "black" : "white"} ${
-                isOpen ? "block" : "hidden"
-              }`}
-            >
-              Create New
-            </p>
-          </div>
-        </Link>
-        <Link to="/notes">
-          <div className="flex  items-center gap-2 hover:bg-slate-400 py-2 px-3 cursor-pointer rounded-sm">
-            <MdNotes
-              className={`text-${mode === "light" ? "black" : "white"}`}
-              size={30}
-            />
-            {isOpen && (
-              <p className={`text-${mode === "light" ? "black" : "white"}`}>
-                Notes
-              </p>
-            )}
-          </div>
-        </Link>
-
-        <Link to="/trash-notes">
-          <div className="flex  items-center gap-2 hover:bg-slate-400 py-2 px-3 cursor-pointer rounded-sm">
-            <FaRegTrashAlt
-              className={`text-${mode === "light" ? "black" : "white"}`}
-              size={30}
-            />
-            {isOpen && (
-              <p className={`text-${mode === "light" ? "black" : "white"}`}>
-                Trash
-              </p>
-            )}
-          </div>
-        </Link>
-
-        <Link to={"/favourite-notes"}>
-          <div className="flex  items-center gap-2 hover:bg-slate-400 py-2 px-3 cursor-pointer rounded-sm">
-            <MdFavoriteBorder
-              className={`text-${mode === "light" ? "black" : "white"}`}
-              size={30}
-            />
-            {isOpen && (
-              <p className={`text-${mode === "light" ? "black" : "white"}`}>
-                Favourite
-              </p>
-            )}
-          </div>
-        </Link>
-        <Link to={`${isLoggedIn ? "/profile" : "/register"}`}>
-          <div className="flex  items-center gap-2 hover:bg-slate-400 py-2 px-3 cursor-pointer rounded-sm">
-            <AiOutlineUser
-              className={`text-${mode === "light" ? "black" : "white"}`}
-              size={30}
-            />
-            {isOpen && (
-              <p className={`text-${mode === "light" ? "black" : "white"}`}>
-                Login
-              </p>
-            )}
-          </div>
-        </Link>
+        {sideBarItems.map((item) => {
+          return (
+            <Link to={item.path}>
+              <div className="flex  items-center gap-2 hover:bg-slate-400 py-2 px-3 cursor-pointer rounded-sm">
+                {item.icon}
+                {isOpen && (
+                  <p className={`text-${mode === "light" ? "black" : "white"}`}>
+                    {item.text}
+                  </p>
+                )}
+              </div>
+            </Link>
+          );
+        })}
 
         <div
           className="flex  items-center gap-2 hover:bg-slate-400 py-2 px-3 cursor-pointer rounded-sm"
