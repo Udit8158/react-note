@@ -12,8 +12,6 @@ import { AlertContext } from "../../context/AlertContext";
 
 function Sidebar({ isOpen, setIsOpen }) {
   const { mode, toggleMode } = useContext(ThemeContext);
-  // console.log(mode);
-  // console.log(isOpen);
   const { logOut, isLoggedIn } = useContext(AuthContext);
   const { toggleAlert } = useContext(AlertContext);
 
